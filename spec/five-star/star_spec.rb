@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Five::Star do
+describe FiveStar do
   it 'has a version number' do
-    expect(Five::Star::VERSION).not_to be nil
+    expect(FiveStar::VERSION).not_to be nil
   end
 
   it 'does something useful' do
