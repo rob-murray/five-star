@@ -1,7 +1,13 @@
 # FiveStar
 ### A generic rating library :star:
 
-:star: **FiveStar** :star: is a library to build a rating system - it allows you to rate *something* in your system with some criteria you can define. This library gives you the structure to rate your object with as many different classifications.
+[![Build Status](https://travis-ci.org/rob-murray/five-star.svg?branch=master)](https://travis-ci.org/rob-murray/five-star)
+[![Code Climate](https://codeclimate.com/github/rob-murray/five-star.png)](https://codeclimate.com/github/rob-murray/five-star)
+[![Coverage Status](https://coveralls.io/repos/rob-murray/five-star/badge.png)](https://coveralls.io/r/rob-murray/five-star)
+[![Dependency Status](https://gemnasium.com/rob-murray/five-star.svg)](https://gemnasium.com/rob-murray/five-star)
+[![Gem Version](https://badge.fury.io/rb/five-star.svg)](http://badge.fury.io/rb/five-star)
+
+:star: **FiveStar** :star: is a library to build a rating system - it allows you to rate *something* in your domain by classification or criteria you define. This library gives you the structure to rate your object with as many of these different classifications as you like with the overall rating as a weighted average.
 
 This uses Plain Old Ruby Objects so can be used in any project. Implement or use whatever persistence layer you want.
 
@@ -46,7 +52,7 @@ class SwearingRater < FiveStar.base_rater
   end
 
   def rating
-    # count the pints of blood spilt in the film
+    # count the number of swear words in the film
   end
 end
 
@@ -75,7 +81,7 @@ Or install it yourself as:
 
 ## Usage
 
-There are two components required, the thing being rated and how it is rated. You must implement your own rating class and provide the classes to the item being rated.
+There are two components required, the thing being rated and how it is rated - the thing you want rated is defined as being rateable and you can have one or more "raters" to give it a rating. You must implement your these raters and provide the classes to the item being rated, this library takes care of the rest.
 
 * `Rateable` - This is the object that can be rated based on
 * `Rater` - A class that knows how to give a rating to the object being rated
@@ -88,8 +94,8 @@ The current rating scale used is 0 - 10 as floating point numbers that can be ro
 
 This module when included gives the object the following interface on the instance.
 
-* `rating` - `[Float]` -  The overall rating calculated from each rater class
-* `rating_descriptions` - `Array` - A list of the description from each rater
+* `rating` - `[Float]` -  The overall rating calculated
+* `rating_descriptions` - `[Array]` - A list of the description from each rater class
 
 The classes used to rate the object can be specified using the class method `rate_with(*class_names)` and passing in one or more rating classes.
 
@@ -140,7 +146,7 @@ end
 
 ### Rating calculation
 
-The calculation used will be a weighted average based on each rating and the weighting. If weighting is not required then all will be weighted the same and so this is just a normal mean average calculation.
+The calculation used will be a weighted average based on each rating and the weighting. If weighting is not required then all will be use the default value and therefore be weighted the same which is just a normal mean average calculation.
 
 The minimum rating is 0.0 and the maximum is 10.0
 
