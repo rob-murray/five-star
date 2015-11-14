@@ -10,14 +10,11 @@ module FiveStar
 
     def calculate_rating
       return 0 unless raters.any?
-      rating_and_weights = raters.map{ |rater| [rater.rating, rater.weighting] }
 
-      totals = rating_and_weights.map { |rating, weight| rating * weight }
-      weights = rating_and_weights.map { |_rating, weight| weight }
-      total = totals.inject(&:+)
-      weight_total = weights.inject(&:+)
+      sum_total = raters.map { |rater| rater.rating * rater.weighting }.inject(&:+)
+      weights_total = raters.map(&:weighting).inject(&:+)
 
-      total / weight_total.to_f
+      sum_total / weights_total.to_f
     end
 
     private
