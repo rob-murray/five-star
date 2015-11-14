@@ -5,4 +5,4 @@ require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 Coveralls.wear!
 
-require "five_star"
+require "five-star"
