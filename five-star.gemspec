@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Rob Murray"]
   spec.email         = ["robmurray17@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{:star: A generic rating library :star:}
+  spec.description   = %q{A Rating system for your Ruby objects; Rate an object with one or more rating classifications.}
+  spec.homepage      = "https://github.com/rob-murray/five-star"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
