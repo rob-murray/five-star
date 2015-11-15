@@ -1,13 +1,12 @@
 # FiveStar
-### A generic rating library :star:
 
 [![Build Status](https://travis-ci.org/rob-murray/five-star.svg?branch=master)](https://travis-ci.org/rob-murray/five-star)
 [![Code Climate](https://codeclimate.com/github/rob-murray/five-star.png)](https://codeclimate.com/github/rob-murray/five-star)
-[![Coverage Status](https://coveralls.io/repos/rob-murray/five-star/badge.png)](https://coveralls.io/r/rob-murray/five-star)
+[![Coverage Status](https://coveralls.io/repos/rob-murray/five-star/badge.svg?branch=master&service=github)](https://coveralls.io/github/rob-murray/five-star?branch=master)
 [![Dependency Status](https://gemnasium.com/rob-murray/five-star.svg)](https://gemnasium.com/rob-murray/five-star)
 [![Gem Version](https://badge.fury.io/rb/five-star.svg)](http://badge.fury.io/rb/five-star)
 
-:star: **FiveStar** :star: is a library to build a rating system - it allows you to rate *something* in your domain by classification or criteria you define. This library gives you the structure to rate your object with as many of these different classifications as you like with the overall rating as a weighted average.
+:star: **FiveStar** :star: is a library to build a rating system - it allows you to rate *something* in your domain by various classification or criteria you define. This library gives you the structure to rate your object with as many of these different classifications as you like with the overall rating calculated from the weighted average.
 
 This uses Plain Old Ruby Objects so can be used in any project. Implement or use whatever persistence layer you want.
 
@@ -15,7 +14,7 @@ This uses Plain Old Ruby Objects so can be used in any project. Implement or use
 
 ## Example
 
-Say you implemented a film rating system, you have lots of `Film` objects each with different attributes and you would like to show an overall rating for each film based on classifications below.
+Say you implemented a film rating system, you have lots of `Film` objects each with different attributes and you would like to show an overall rating for each film based on classifications below. You might give the amount of swearing in the film slightly less weighting that the amount of sex and violence.
 
 * Gore - Amount of blood in the movie - weighting: 40%
 * Sex - Number of references to sex in the movie - weighting: 40%
@@ -29,18 +28,32 @@ class Film
 
   rate_with GoreRater, SwearingRater, SexRater
 
-  # rest of you implementation
+  # rest of your implementation
+  def blood_spilt
+    #...
+  end
+
+  def number_of_swear_words
+    #...
+  end
 end
 
 class GoreRater < FiveStar.base_rater
   rating_weight 0.4
 
   def description
-    "This Film was rated #{rating} for gore"
+    "The Film #{film.title} was rated #{rating} for gore"
   end
 
   def rating
-    # count the pints of blood spilt in the film
+    # count the pints of blood spilt in the film and return a rating
+    if film.blood_spilt == :a_lot
+      10
+    elsif film.blood_spilt == :a_little
+      5
+    else
+      0
+    end
   end
 end
 
@@ -48,17 +61,18 @@ class SwearingRater < FiveStar.base_rater
   rating_weight 0.2
 
   def description
-    "This Film was has #{number_of_swear_words} and was rated at #{rating}"
+    "The Film #{film.title} has #{film.number_of_swear_words} and was rated at #{rating}"
   end
 
   def rating
-    # count the number of swear words in the film
+    # count the number of swear words in the film & convert to our rating scale
+    linear_conversion(film.number_of_swear_words)
   end
 end
 
 film = Film.new
 film.rating # => 6
-film.rating_descriptions # => ["This Film was rated 8 for gore", ...]
+film.rating_descriptions # => ["This Film Alien was rated 8 for gore", ...]
 
 ```
 
@@ -81,21 +95,23 @@ Or install it yourself as:
 
 ## Usage
 
-There are two components required, the thing being rated and how it is rated - the thing you want rated is defined as being rateable and you can have one or more "raters" to give it a rating. You must implement your these raters and provide the classes to the item being rated, this library takes care of the rest.
+There are two components required, the thing being rated and how it is rated - the thing you want rated is defined as being rateable and you can have one or more rating classes to give it a rating. You must implement your these raters and provide the classes to the item being rated, this library takes care of the rest.
 
-* `Rateable` - This is the object that can be rated based on
-* `Rater` - A class that knows how to give a rating to the object being rated
+* `rateable` - This is the object that can be rated -  this is your domain model that has various attributes that you need rated.
+* `rater` - A class that knows how to give a rating to the object being rated based on classification of the rateable's attributes.
 
-Each `Rater` must return a rating within the scale given and a weighting which will be used to calculate the overall rating.
+Each `rater` must return a rating within the scale given and a weighting which will be used to calculate the overall rating.
 
 The current rating scale used is 0 - 10 as floating point numbers that can be rounded as you require.
+
+The rating calculation will take the rating value from each rater along with the weighting to calculate the overall average rating.
 
 ### Rateable
 
 This module when included gives the object the following interface on the instance.
 
-* `rating` - `[Float]` -  The overall rating calculated
-* `rating_descriptions` - `[Array]` - A list of the description from each rater class
+* `rating` - `@return [Float]` -  The overall rating calculated for the rateable object.
+* `rating_descriptions` - `@return [Array]` - A list of description from each raters. This is delegated to the rater.
 
 The classes used to rate the object can be specified using the class method `rate_with(*class_names)` and passing in one or more rating classes.
 
@@ -115,18 +131,19 @@ film.rating_descriptions # => ["This Film was rated 8 for gore", ...]
 
 You can create your own rating classes however you like but they should respond to the following methods;
 
-* `rating` - `[Float]` - The rating for the object being rated
-* `description` - `[String]` - A description of the rating, eg reason it was rated at that value
-* `weighting` - `[Float]` - The weighting for this classification
+* `build` - `@param [Rateable], @return [instance of rater]` - Create a new instance of rater with rateable as argument.
+* `rating` - `@return [Float]` - The rating for the object being rated. Calculate this by your own classification.
+* `description` - `@return [String]` - A description of the rating, eg reason it was rated at that value.
+* `weighting` - `@return [Float]` - The weighting for this classification. Withing range 0.0 - 1.0
 
-The **FiveStar** will call `build` method on the `Rater` with the argument of the instance of class being rated which should do any setup and return an instance of the rater.
+The **FiveStar** library will call the `build` method on the `Rater` with the argument of the instance of class being rated which should do any setup and return an instance of the rater.
 
-For simplicity you can subclass `FiveStar.base_rater` and get the following for free.
+For simplicity you can subclass `FiveStar.base_rater` and get the following for free. If the above methods are not overriden then the default implementation will be used.
 
-* `rating_weight` - Class method to set the weighting for this rater
-* `rateable` - Instance method referencing the object being rated
-* `min_rating` - Instance method returning the minimum rating value
-* `max_rating` - Instance method returning the maximum rating value
+* `rating_weight` - `@param [Float]` - Class method to set the weighting for this rater
+* `rateable` - `@return [Rateable]` - Instance method referencing the object being rated
+* `min_rating` - `@return [Float]` - Instance method returning the minimum rating value
+* `max_rating` - `@return [Float]` - Instance method returning the maximum rating value
 
 For example a basic version could be something like this;
 
@@ -135,7 +152,7 @@ class GoreRater < FiveStar.base_rater
   rating_weight 0.4
 
   def description
-    "This Film was rated #{rating} for gore"
+    "The Film #{film.title} has #{film.number_of_swear_words} and was rated at #{rating}"
   end
 
   def rating
