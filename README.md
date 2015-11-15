@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/rob-murray/five-star/badge.svg?branch=master&service=github)](https://coveralls.io/github/rob-murray/five-star?branch=master)
 [![Dependency Status](https://gemnasium.com/rob-murray/five-star.svg)](https://gemnasium.com/rob-murray/five-star)
 [![Gem Version](https://badge.fury.io/rb/five-star.svg)](http://badge.fury.io/rb/five-star)
-[![Documentation](https://inch-ci.org/github/rob-murray/five-star.svg?branch=master)](http://inch-ci.org/github/rob-murray/five-star.svg?branch=master)
+[![Documentation](https://inch-ci.org/github/rob-murray/five-star.svg?branch=master)](http://inch-ci.org/github/rob-murray/five-star/)
 
 :star: **FiveStar** :star: is a library to build a rating system - it allows you to rate *something* in your domain by various classification or criteria you define. This library gives you the structure to rate your object with as many of these different classifications as you like with the overall rating calculated from the weighted average.
 
