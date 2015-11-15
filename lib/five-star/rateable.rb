@@ -4,6 +4,7 @@ module FiveStar
     # Extends base class or a module with Rateable methods
     #
     # @param [Object] object
+    #   the object to mix in this +Rateable+ module
     #
     # @return [undefined]
     #
