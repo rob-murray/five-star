@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/rob-murray/five-star/badge.svg?branch=master&service=github)](https://coveralls.io/github/rob-murray/five-star?branch=master)
 [![Dependency Status](https://gemnasium.com/rob-murray/five-star.svg)](https://gemnasium.com/rob-murray/five-star)
 [![Gem Version](https://badge.fury.io/rb/five-star.svg)](http://badge.fury.io/rb/five-star)
-[![Documentation](https://inch-ci.org/github/rob-murray/five-star.svg?branch=master)](http://inch-ci.org/github/rob-murray/five-star/)
+
 
 :star: **FiveStar** :star: is a library to build a rating system - it allows you to rate *something* in your domain by various classification or criteria you define. This library gives you the structure to rate your object with as many of these different classifications as you like with the overall rating calculated from the weighted average.
 
@@ -103,7 +103,7 @@ There are two components required, the thing being rated and how it is rated - t
 
 Each `rater` must return a rating within the scale given and a weighting which will be used to calculate the overall rating.
 
-The current rating scale used is 0 - 10 as floating point numbers that can be rounded as you require.
+The default rating scale used is 0 - 10 as floating point numbers although this can be overriden and customised.
 
 The rating calculation will take the rating value from each rater along with the weighting to calculate the overall average rating.
 
@@ -165,9 +165,9 @@ end
 
 ### Rating calculation
 
-The calculation used will be a weighted average based on each rating and the weighting. If weighting is not required then all will be use the default value and therefore be weighted the same which is just a normal mean average calculation.
+The calculation used will be a weighted average based on each rating and the weighting defined in that class. If weighting is not required then all will be use the default value (of 1.0) and therefore be weighted the same, this being just a normal mean average calculation.
 
-The minimum rating is 0.0 and the maximum is 10.0
+The default rating scale used is 0 - 10 as floating point numbers although this can be overriden and customised.
 
 
 ## Development
