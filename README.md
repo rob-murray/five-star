@@ -1,17 +1,15 @@
 # FiveStar
 
 [![Build Status](https://travis-ci.org/rob-murray/five-star.svg?branch=master)](https://travis-ci.org/rob-murray/five-star)
-[![Code Climate](https://codeclimate.com/github/rob-murray/five-star.png)](https://codeclimate.com/github/rob-murray/five-star)
+[![Code Climate](https://codeclimate.com/github/rob-murray/five-star.svg)](https://codeclimate.com/github/rob-murray/five-star)
 [![Coverage Status](https://coveralls.io/repos/rob-murray/five-star/badge.svg?branch=master&service=github)](https://coveralls.io/github/rob-murray/five-star?branch=master)
-[![Dependency Status](https://gemnasium.com/rob-murray/five-star.svg)](https://gemnasium.com/rob-murray/five-star)
 [![Gem Version](https://badge.fury.io/rb/five-star.svg)](http://badge.fury.io/rb/five-star)
 
 
 :star: **FiveStar** :star: is a library to build a rating system - it allows you to rate *something* in your domain by various classification or criteria you define. This library gives you the structure to rate your object with as many of these different classifications as you like with the overall rating calculated from the weighted average.
 
-This uses Plain Old Ruby Objects so can be used in any project. Implement or use whatever persistence layer you want.
+This uses *Plain Old Ruby Objects* so can be used in any project.
 
-> Not sure if this is a gem or just a code design pattern :/
 
 ## Example
 
