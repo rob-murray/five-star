@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe FiveStar::BaseRater do
+RSpec.describe FiveStar::BaseRater do
   let(:rateable) { double("Rateable", name: "Rateable") }
   subject { described_class.new(rateable) }
 

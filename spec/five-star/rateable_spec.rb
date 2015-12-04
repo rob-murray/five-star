@@ -1,8 +1,9 @@
 require "spec_helper"
 
-describe FiveStar::Rateable do
+RSpec.describe FiveStar::Rateable do
   class Rater
     def self.build(_); self; end
+    def self.description; end
   end
 
   subject(:dummy_class) {

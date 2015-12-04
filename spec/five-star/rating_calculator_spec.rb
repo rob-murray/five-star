@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe FiveStar::RatingCalculator do
+RSpec.describe FiveStar::RatingCalculator do
   let(:list_of_raters) { [first_rater, second_rater, third_rater] }
   subject { described_class.new(list_of_raters) }
 

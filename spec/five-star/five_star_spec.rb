@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe FiveStar do
+RSpec.describe FiveStar do
   describe ".rateable" do
     it "is the rateable module" do
       expect(FiveStar.rateable).to eq(FiveStar::Rateable)
