@@ -45,31 +45,32 @@ describe FiveStar::Rateable do
   end
 
   describe "integration specs" do
-    class FirstRater
-      def self.build(_); self; end
-      def self.description; "A"; end
-      def self.rating; 2; end
-      def self.weighting; 0.6; end
+    class FirstRater < FiveStar.base_rater
+      def description; "A"; end
+      def rating; 2; end
+      def weighting; 0.6; end
     end
 
-    class SecondRater
-      def self.build(_); self; end
-      def self.description; "B"; end
-      def self.rating; 7; end
-      def self.weighting; 0.4; end
+    class SecondRater < FiveStar.base_rater
+      def rating; 7; end
+      def weighting; 0.4; end
     end
 
-    class ThirdRater
-      def self.build(_); self; end
-      def self.description; "C"; end
-      def self.rating; 6; end
-      def self.weighting; 0.3; end
+    class ThirdRater < FiveStar.base_rater
+      def description
+        "ThirdRater rated #{rateable.name} at #{rating} with weighting of #{weighting}"
+      end
+      def rating; 6; end
+      def weighting; 0.3; end
     end
 
     subject(:dummy_class) {
       Class.new do
         include FiveStar::Rateable
         rate_with(FirstRater, SecondRater, ThirdRater)
+        def name
+          "DummyClass"
+        end
       end
     }
 
@@ -81,7 +82,7 @@ describe FiveStar::Rateable do
 
     describe "#rating_descriptions" do
       it "returns descriptions from raters in order" do
-        expect(dummy_class.new.rating_descriptions).to eq ["A", "B", "C"]
+        expect(dummy_class.new.rating_descriptions).to eq ["A", "SecondRater rated DummyClass at 7 with weighting of 0.4", "ThirdRater rated DummyClass at 6 with weighting of 0.3"]
       end
     end
   end

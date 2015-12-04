@@ -81,6 +81,18 @@ module FiveStar
       raters.map { |rater| rater.description }
     end
 
+    # The name of the object that is rateable. This may be used by raters
+    #   when generating descriptions.
+    # This can be overridden to provide a better response, otherwise is the class
+    #   name.
+    #
+    # @return [String] name of the class
+    #
+    # @api public
+    def name
+      self.class.name
+    end
+
     protected
 
     # The instance that included this module

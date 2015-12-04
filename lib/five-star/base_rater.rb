@@ -77,7 +77,7 @@ module FiveStar
     #
     # @api public
     def description
-      "#{self.class} rated #{rateable.class} at #{rating} with weighting of #{weighting}"
+      "#{self.class} rated #{rateable_name} at #{rating} with weighting of #{weighting}"
     end
 
     # Return the rating for the rater given to the `rateable` object.
@@ -148,6 +148,16 @@ module FiveStar
     # @api protected
     def min_rating
       0
+    end
+
+    # Return the name of the given rateable instance.
+    #
+    # @return [String]
+    #   the name of the object being rated.
+    #
+    # @api protected
+    def rateable_name
+      rateable.name
     end
   end
 end
