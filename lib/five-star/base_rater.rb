@@ -157,7 +157,7 @@ module FiveStar
     #
     # @api protected
     def rateable_name
-      rateable.name
+      rateable.rateable_name
     end
   end
 end

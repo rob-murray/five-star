@@ -59,7 +59,7 @@ RSpec.describe FiveStar::Rateable do
 
     class ThirdRater < FiveStar.base_rater
       def description
-        "ThirdRater rated #{rateable.name} at #{rating} with weighting of #{weighting}"
+        "ThirdRater rated #{rateable.rateable_name} at #{rating} with weighting of #{weighting}"
       end
       def rating; 6; end
       def weighting; 0.3; end
@@ -69,8 +69,8 @@ RSpec.describe FiveStar::Rateable do
       Class.new do
         include FiveStar::Rateable
         rate_with(FirstRater, SecondRater, ThirdRater)
-        def name
-          "DummyClass"
+        def rateable_name
+          "Dummy rater"
         end
       end
     }
@@ -83,7 +83,7 @@ RSpec.describe FiveStar::Rateable do
 
     describe "#rating_descriptions" do
       it "returns descriptions from raters in order" do
-        expect(dummy_class.new.rating_descriptions).to eq ["A", "SecondRater rated DummyClass at 7 with weighting of 0.4", "ThirdRater rated DummyClass at 6 with weighting of 0.3"]
+        expect(dummy_class.new.rating_descriptions).to eq ["A", "SecondRater rated Dummy rater at 7 with weighting of 0.4", "ThirdRater rated Dummy rater at 6 with weighting of 0.3"]
       end
     end
   end

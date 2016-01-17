@@ -89,7 +89,7 @@ module FiveStar
     # @return [String] name of the class
     #
     # @api public
-    def name
+    def rateable_name
       self.class.name
     end
 
