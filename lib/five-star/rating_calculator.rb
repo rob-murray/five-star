@@ -27,11 +27,30 @@ module FiveStar
     attr_reader :raters
 
     def sum_total
-      raters.map { |rater| rater.rating * rater.weighting }.inject(&:+)
+      raters.map { |rater|
+        validate_rating!(rater.rating, rater) * validate_weighting!(rater.weighting, rater)
+      }.inject(&:+)
     end
 
     def weights_total
       raters.map(&:weighting).inject(&:+)
+    end
+
+    def validate_rating!(rating, rater)
+      #rating = rating.to_i
+      if rating < 0 || rating > 10
+        raise RatingError, "Rating #{rating} is invalid from #{rater.class}"
+      else
+        rating
+      end
+    end
+
+    def validate_weighting!(weighting, rater)
+      if weighting < 0.0 || weighting > 1.0
+        raise RatingError, "Weighting #{weighting} is invalid from #{rater.class}"
+      else
+        weighting
+      end
     end
   end
 end

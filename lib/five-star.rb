@@ -1,6 +1,7 @@
 require "five-star/version"
 require "five-star/base_rater"
 require "five-star/rateable"
+require "five-star/errors"
 require "five-star/rating_calculator"
 
 # Base module for library interface
