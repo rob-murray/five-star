@@ -62,7 +62,7 @@ module FiveStar
     #
     # @api public
     def rating
-      rating_calculator.rate(raters)
+      rating_calculator.rate(config, raters)
     end
 
     # Return the rating description for each rater given to the `rateable`
@@ -116,6 +116,10 @@ module FiveStar
 
     def rating_calculator
       RatingCalculator
+    end
+
+    def config
+      Configuration.new
     end
   end
 end

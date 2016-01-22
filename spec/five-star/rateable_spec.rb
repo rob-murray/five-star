@@ -1,6 +1,7 @@
 require "spec_helper"
 
 RSpec.describe FiveStar::Rateable do
+  # let(:configuration) { double("Configuration", min_rating: 0, max_rating: 10) }
   class Rater
     def self.build(_); self; end
     def self.description; end
@@ -25,7 +26,7 @@ RSpec.describe FiveStar::Rateable do
     end
 
     it "passes raters to calculation class" do
-      expect(FiveStar::RatingCalculator).to receive(:rate).with([Rater, Rater, Rater])
+      expect(FiveStar::RatingCalculator).to receive(:rate).with(anything, [Rater, Rater, Rater])
 
       dummy_class.new.rating
     end

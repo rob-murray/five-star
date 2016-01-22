@@ -2,7 +2,8 @@ require "spec_helper"
 
 RSpec.describe FiveStar::RatingCalculator do
   let(:list_of_raters) { [first_rater, second_rater, third_rater] }
-  subject { described_class.new(list_of_raters) }
+  let(:configuration) { double("Configuration", min_rating: 0, max_rating: 10) }
+  subject { described_class.new(configuration, list_of_raters) }
 
   describe "#calculate_rating" do
     context "with no rating classes provided" do

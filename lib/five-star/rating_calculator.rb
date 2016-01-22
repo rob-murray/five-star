@@ -3,11 +3,12 @@ module FiveStar
   #   Each instance must implement `rating` and `weighting`.
   # @api private
   class RatingCalculator
-    def self.rate(raters)
-      new(raters).calculate_rating
+    def self.rate(configuration, raters)
+      new(configuration, raters).calculate_rating
     end
 
-    def initialize(raters)
+    def initialize(configuration, raters)
+      @configuration = configuration
       @raters = raters
     end
 
@@ -24,7 +25,7 @@ module FiveStar
 
     private
 
-    attr_reader :raters
+    attr_reader :raters, :configuration
 
     def sum_total
       raters.map { |rater|
@@ -38,7 +39,7 @@ module FiveStar
 
     def validate_rating!(rating, rater)
       #rating = rating.to_i
-      if rating < 0 || rating > 10
+      if rating < min_rating || rating > max_rating
         raise RatingError, "Rating #{rating} is invalid from #{rater.class}"
       else
         rating
@@ -51,6 +52,14 @@ module FiveStar
       else
         weighting
       end
+    end
+
+    def min_rating
+      configuration.min_rating
+    end
+
+    def max_rating
+      configuration.max_rating
     end
   end
 end
