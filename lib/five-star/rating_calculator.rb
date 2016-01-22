@@ -30,11 +30,11 @@ module FiveStar
     def sum_total
       raters.map { |rater|
         validate_rating!(rater.rating, rater) * validate_weighting!(rater.weighting, rater)
-      }.inject(&:+)
+      }.reduce(&:+)
     end
 
     def weights_total
-      raters.map(&:weighting).inject(&:+)
+      raters.map(&:weighting).reduce(&:+)
     end
 
     def validate_rating!(rating, rater)
