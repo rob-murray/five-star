@@ -47,7 +47,7 @@ module FiveStar
     end
 
     def validate_weighting!(weighting, rater)
-      if weighting < 0.0 || weighting > 1.0
+      if weighting < min_weighting || weighting > max_weighting
         raise RatingError, "Weighting #{weighting} is invalid from #{rater.class}"
       else
         weighting
@@ -60,6 +60,14 @@ module FiveStar
 
     def max_rating
       configuration.max_rating
+    end
+
+    def min_weighting
+      configuration.min_weighting
+    end
+
+    def max_weighting
+      configuration.max_weighting
     end
   end
 end

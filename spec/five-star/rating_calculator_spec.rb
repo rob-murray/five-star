@@ -2,7 +2,7 @@ require "spec_helper"
 
 RSpec.describe FiveStar::RatingCalculator do
   let(:list_of_raters) { [first_rater, second_rater, third_rater] }
-  let(:configuration) { double("Configuration", min_rating: 0, max_rating: 10) }
+  let(:configuration) { double("Configuration", min_rating: 0, max_rating: 10, min_weighting: 0.0, max_weighting: 1.0) }
   subject { described_class.new(configuration, list_of_raters) }
 
   describe "#calculate_rating" do
@@ -16,22 +16,24 @@ RSpec.describe FiveStar::RatingCalculator do
 
     describe "validation" do
       describe "rating" do
-        let(:first_rater) { double("FiveStar::BaseRater", class: "FiveStar::BaseRater", rating: 5, weighting: 1.0) }
+        let(:first_rater) { double("FiveStar::BaseRater", class: "FiveStar::BaseRater", rating: 1, weighting: 1.0) }
         let(:second_rater) { double("FiveStar::BaseRater", class: "FiveStar::ErrorRater", rating: rating, weighting: 1.0) }
-        let(:third_rater) { double("FiveStar::BaseRater", class: "FiveStar::BaseRater", rating: 5, weighting: 1.0) }
+        let(:third_rater) { double("FiveStar::BaseRater", class: "FiveStar::BaseRater", rating: 1, weighting: 1.0) }
 
         context "below minimum" do
-          let(:rating) { -1 }
+          let(:configuration) { double("Configuration", min_rating: 1, max_rating: 10, min_weighting: 0.0, max_weighting: 1.0) }
+          let(:rating) { 0 }
 
           it "raises error with helpful message" do
             expect{
               subject.calculate_rating
-            }.to raise_error(FiveStar::RatingError).with_message("Rating -1 is invalid from FiveStar::ErrorRater")
+            }.to raise_error(FiveStar::RatingError).with_message("Rating #{rating} is invalid from FiveStar::ErrorRater")
           end
         end
 
         context "on minimum" do
-          let(:rating) { 0 }
+          let(:configuration) { double("Configuration", min_rating: 1, max_rating: 10, min_weighting: 0.0, max_weighting: 1.0) }
+          let(:rating) { 1 }
 
           it "does not raise error" do
             expect{
@@ -41,6 +43,7 @@ RSpec.describe FiveStar::RatingCalculator do
         end
 
         context "within range" do
+          let(:configuration) { double("Configuration", min_rating: 0, max_rating: 10, min_weighting: 0.0, max_weighting: 1.0) }
           let(:rating) { 5 }
 
           it "does not raise error" do
@@ -51,7 +54,8 @@ RSpec.describe FiveStar::RatingCalculator do
         end
 
         context "on maximum" do
-          let(:rating) { 10 }
+          let(:configuration) { double("Configuration", min_rating: 0, max_rating: 1, min_weighting: 0.0, max_weighting: 1.0) }
+          let(:rating) { 1 }
 
           it "does not raise error" do
             expect{
@@ -61,12 +65,13 @@ RSpec.describe FiveStar::RatingCalculator do
         end
 
         context "above maximum" do
-          let(:rating) { 11 }
+          let(:configuration) { double("Configuration", min_rating: 0, max_rating: 2, min_weighting: 0.0, max_weighting: 1.0) }
+          let(:rating) { 3 }
 
           it "raises error with helpful message" do
             expect{
               subject.calculate_rating
-            }.to raise_error(FiveStar::RatingError).with_message("Rating 11 is invalid from FiveStar::ErrorRater")
+            }.to raise_error(FiveStar::RatingError).with_message("Rating #{rating} is invalid from FiveStar::ErrorRater")
           end
         end
       end
@@ -77,16 +82,18 @@ RSpec.describe FiveStar::RatingCalculator do
         let(:third_rater) { double("FiveStar::BaseRater", class: "FiveStar::BaseRater", rating: 5, weighting: 1.0) }
 
         context "below minimum" do
+          let(:configuration) { double("Configuration", min_rating: 1, max_rating: 10, min_weighting: 0.0, max_weighting: 1.0) }
           let(:weighting) { -1 }
 
           it "raises error with helpful message" do
             expect{
               subject.calculate_rating
-            }.to raise_error(FiveStar::RatingError).with_message("Weighting -1 is invalid from FiveStar::ErrorRater")
+            }.to raise_error(FiveStar::RatingError).with_message("Weighting #{weighting} is invalid from FiveStar::ErrorRater")
           end
         end
 
         context "on minimum" do
+          let(:configuration) { double("Configuration", min_rating: 1, max_rating: 10, min_weighting: 0.0, max_weighting: 1.0) }
           let(:weighting) { 0 }
 
           it "does not raise error" do
@@ -97,6 +104,7 @@ RSpec.describe FiveStar::RatingCalculator do
         end
 
         context "within range" do
+          let(:configuration) { double("Configuration", min_rating: 1, max_rating: 10, min_weighting: 0.0, max_weighting: 1.0) }
           let(:weighting) { 0.5 }
 
           it "does not raise error" do
@@ -107,6 +115,7 @@ RSpec.describe FiveStar::RatingCalculator do
         end
 
         context "on maximum" do
+          let(:configuration) { double("Configuration", min_rating: 1, max_rating: 10, min_weighting: 0.0, max_weighting: 1.0) }
           let(:weighting) { 1.0 }
 
           it "does not raise error" do
@@ -117,6 +126,7 @@ RSpec.describe FiveStar::RatingCalculator do
         end
 
         context "above maximum" do
+          let(:configuration) { double("Configuration", min_rating: 1, max_rating: 10, min_weighting: 0.0, max_weighting: 1.0) }
           let(:weighting) { 1.1 }
 
           it "raises error with helpful message" do
