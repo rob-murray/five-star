@@ -119,7 +119,7 @@ module FiveStar
     end
 
     def config
-      Configuration.new
+      @config ||= Configuration.new
     end
   end
 end
