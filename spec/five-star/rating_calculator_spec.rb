@@ -7,10 +7,12 @@ RSpec.describe FiveStar::RatingCalculator do
 
   describe "#calculate_rating" do
     context "with no rating classes provided" do
+      let(:configuration) { double("Configuration", min_rating: min_rating, max_rating: 10, min_weighting: 0.0, max_weighting: 1.0) }
       let(:list_of_raters) { [] }
+      let(:min_rating) { 1 }
 
-      it "is zero" do
-        expect(subject.calculate_rating).to be_zero
+      it "is returns minimum rating" do
+        expect(subject.calculate_rating).to eq 1
       end
     end
 

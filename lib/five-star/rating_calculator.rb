@@ -18,7 +18,7 @@ module FiveStar
     #
     # @api private
     def calculate_rating
-      return 0 unless raters.any?
+      return min_rating unless raters.any?
 
       sum_total / weights_total.to_f
     end
