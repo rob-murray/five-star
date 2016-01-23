@@ -8,7 +8,7 @@
 
 :star: **FiveStar** :star: is a library to build a rating system - it allows you to rate *something* in your domain by various classification or criteria you define. This library gives you the structure to rate your object with as many of these different classifications as you like with the overall rating calculated from the weighted average.
 
-This uses *Plain Old Ruby Objects* so can be used in any project.
+This gem uses *Plain Old Ruby Objects* so it can be used in any project.
 
 
 ## Example
@@ -70,7 +70,7 @@ class SwearingRater < FiveStar.base_rater
 end
 
 film = Film.new
-film.rating # => 6
+film.rating # => 6.0
 film.rating_descriptions # => ["The film Alien was rated 8 for gore", ...]
 
 ```
@@ -123,7 +123,7 @@ class Film
 end
 
 film = Film.new
-film.rating # => 6
+film.rating # => 6.0
 film.rating_descriptions # => ["The film Alien was rated 8 for gore", ...]
 ```
 
@@ -165,7 +165,7 @@ end
 
 The calculation used will be a weighted average based on each rating and the weighting defined in that class. If weighting is not required then all will be use the default value (of 1.0) and therefore be weighted the same, this being just a normal mean average calculation.
 
-The default rating scale used is 0 - 10 as floating point numbers although this can be overriden and customised.
+The default rating scale used is 0 - 10 as floating point numbers although this can be customised.
 
 
 ## Development
@@ -176,7 +176,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/five-star. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/rob-murray/five-star. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
 
 ## License

@@ -1,7 +1,8 @@
 require "spec_helper"
 
 RSpec.describe FiveStar::BaseRater do
-  let(:rateable) { double("Rateable", name: "Rateable") }
+  let(:rateable) { double("Rateable", rateable_name: "Rateable", configuration: configuration) }
+  let(:configuration) { double("Configuration", min_rating: 0, max_rating: 10, min_weighting: 0.0, max_weighting: 1.0) }
   subject { described_class.new(rateable) }
 
   describe ".build" do
@@ -38,8 +39,10 @@ RSpec.describe FiveStar::BaseRater do
   end
 
   describe "#rating" do
-    it "is zero by default" do
-      expect(subject.rating).to be_zero
+    let(:configuration) { double("Configuration", min_rating: 100.0, max_rating: 10, min_weighting: 0.0, max_weighting: 1.0) }
+
+    it "is minimum value from configuration by default" do
+      expect(subject.rating).to eq 100.0
     end
   end
 

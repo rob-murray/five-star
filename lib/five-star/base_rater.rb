@@ -1,26 +1,24 @@
 module FiveStar
   # Base implementation of a class to give a rating, weighting and description
-  #   to a +rateable+ instance.
+  # to a +rateable+ instance.
   #
-  # Default implementation is defined below, users should override methods
-  #   with their own implementation.
+  # You are *expected* to subclass this class and override the default
+  # implementation with your own implementation.
   class BaseRater
-    # Called to build a new instance of the rater with the given object
-    #   being rated.
+    # Called to build a new instance of the rater with the given object being rated.
     #
     # @param [Object] rateable
     #   the instance of the Object being rated
     #
-    # @return [Object] the instance created ready to rate
+    # @return [Object] the instance of Rating class created ready to be used
     #
     # @api public
     def self.build(rateable)
       new(rateable)
     end
 
-    # Set the weighting for this rating classifcation class. This can be any
-    #   valid floating point number at present, the weighting system is up to
-    #   the user to ensure correct.
+    # Set the weighting for this rating classifcation class. This should
+    # a valid floating point within the scale configured.
     #
     # @example
     #   class GoreRater < FiveStar.base_rater
@@ -41,11 +39,11 @@ module FiveStar
     # Return the weighting value for this rating classifcation class.
     #
     # @return [Float]
-    #   the weighting value
+    #   the weighting value. Defaults to 1.0
     #
     # @api public
     def self.weighting
-      @weighting ||= 1.0
+      @weighting ||= Configuration::DEFAULT_WEIGHTING
     end
 
     # Create a new instance of rater
@@ -58,9 +56,9 @@ module FiveStar
       @rateable = rateable
     end
 
-    # Return the rating description for the rater given to the `rateable`
-    #   object.
-    # Override to customise this message.
+    # Return the rating description for the rater given to the +rateable+
+    # object.
+    # Override this method to customise the message.
     #
     # @example
     #   class GoreRater < FiveStar.base_rater
@@ -80,11 +78,11 @@ module FiveStar
       "#{self.class} rated #{rateable_name} at #{rating} with weighting of #{weighting}"
     end
 
-    # Return the rating for the rater given to the `rateable` object.
-    # Override this method to perform your own calculation for the rating based
-    #   on your own criteria. If this is an expensive operation then the result
-    #   should be cached as this method *can* be called more than once, for
-    #   example by the +description+ method.
+    # Return the rating for the rater given to the +rateable+ object.
+    # You are *expected* to override this method to perform your own calculation
+    # for the rating based on your own criteria. If this is an expensive
+    # operation then the result should be cached as this method *can* be
+    # called more than once, for example by the +description+ method.
     #
     # @example
     #   class GoreRater < FiveStar.base_rater
@@ -104,12 +102,15 @@ module FiveStar
     #
     #   rater.rating # => 6
     #
-    # @return [Float] the rating value
-    #   defaults to 0 unless overridden
+    # @raise [FiveStar::RatingError] raises error if any raters return either
+    #   +rating+ or +weighting+ that is outside of configuration bounds.
+    #
+    # @return [Float] the rating value calculated.
+    #   Defaults to minimum rating value unless overridden
     #
     # @api public
     def rating
-      0
+      configuration.min_rating
     end
 
     # Return the weighting value for this rating classifcation class.
@@ -127,27 +128,29 @@ module FiveStar
     attr_reader :rateable
 
     # Return the maximum weighting value for this rating classifcation class.
+    # By default this comes from the instance of FiveStar::Configuration used.
     #
     # Override if required - this should be the same for each rater class.
     #
     # @return [Fixnum]
-    #   the maximum rating value.
+    #   the maximum rating value from configuration.
     #
     # @api protected
     def max_rating
-      10
+      configuration.max_rating
     end
 
     # Return the minimum weighting value for this rating classifcation class.
+    # By default this comes from the instance of FiveStar::Configuration used.
     #
     # Override if required - this should be the same for each rater class.
     #
     # @return [Fixnum]
-    #   the minimum rating value.
+    #   the minimum rating value from configuration.
     #
     # @api protected
     def min_rating
-      0
+      configuration.min_rating
     end
 
     # Return the name of the given rateable instance.
@@ -157,7 +160,17 @@ module FiveStar
     #
     # @api protected
     def rateable_name
-      rateable.name
+      rateable.rateable_name
+    end
+
+    # The current configuration instance for the given +rateable+ object.
+    #
+    # @return [FiveStar::Configuration]
+    #   the instance of configuration described by the +rateable+ class.
+    #
+    # @api protected
+    def configuration
+      rateable.configuration
     end
   end
 end
