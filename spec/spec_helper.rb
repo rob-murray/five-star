@@ -5,9 +5,8 @@ rescue LoadError
   puts "Platform incompatible"
 end
 require "coveralls"
-require "codeclimate-test-reporter"
-
-CodeClimate::TestReporter.start
+require "simplecov"
+SimpleCov.start
 Coveralls.wear!
 
 require "five-star"
