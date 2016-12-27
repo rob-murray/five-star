@@ -4,8 +4,8 @@ rvm:
   - 2.0
   - 2.1
   - 2.2
-  - 2.3
-  - 2.4
+  - 2.3.0
+  - 2.4.0
   - jruby
   - rbx
   - ruby-head
@@ -13,6 +13,7 @@ matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: rbx
+    - rvm: jruby
 
 before_install: gem install bundler
 
